@@ -1,8 +1,5 @@
 package main.java;
 
-import java.util.ArrayList;
-import java.util.Scanner;
-
 public class DPBCD {
 
     public DPBCD(){
@@ -13,30 +10,19 @@ public class DPBCD {
 
         String bin;
         System.out.println(Decimal);
-        switch(Decimal){
-            case "0":
-                bin = "0000";break;
-            case "1":
-                bin = "0001";break;
-            case "2":
-                bin = "0010";break;
-            case "3":
-                bin = "0011";break;
-            case "4":
-                bin = "0100";break;
-            case "5":
-                bin = "0101";break;
-            case "6":
-                bin = "0110";break;
-            case "7":
-                bin = "0111";break;
-            case "8":
-                bin = "1000";break;
-            case "9":
-                bin = "1001";break;
-            default:
-                bin = "0000";
-        }
+        bin = switch (Decimal) {
+            case "0" -> "0000";
+            case "1" -> "0001";
+            case "2" -> "0010";
+            case "3" -> "0011";
+            case "4" -> "0100";
+            case "5" -> "0101";
+            case "6" -> "0110";
+            case "7" -> "0111";
+            case "8" -> "1000";
+            case "9" -> "1001";
+            default -> "0000";
+        };
 
         return bin;
     }
@@ -45,26 +31,17 @@ public class DPBCD {
 
         String pattern;
         System.out.println(msb);
-        switch(msb){
-            case "000":
-                pattern = "bcdfgh0jkm";break;
-            case "001":
-                pattern = "bcdfgh100m";break;
-            case "010":
-                pattern = "bcdjkh101m";break;
-            case "011":
-                pattern = "bcd10h111m";break;
-            case "100":
-                pattern = "jkdfgh110m";break;
-            case "101":
-                pattern = "fgd01h111m";break;
-            case "110":
-                pattern = "jkd00h111m";break;
-            case "111":
-                pattern = "00d11h111m";break;
-            default:
-                pattern = "0000";
-        }
+        pattern = switch (msb) {
+            case "000" -> "bcdfgh0jkm";
+            case "001" -> "bcdfgh100m";
+            case "010" -> "bcdjkh101m";
+            case "011" -> "bcd10h111m";
+            case "100" -> "jkdfgh110m";
+            case "101" -> "fgd01h111m";
+            case "110" -> "jkd00h111m";
+            case "111" -> "00d11h111m";
+            default -> "0000";
+        };
 
         return pattern;
     }
@@ -73,39 +50,23 @@ public class DPBCD {
 
         String bitDPBCD;
         System.out.println(key);
-        switch(key){
-            case "a":
-                bitDPBCD = digitBCD[0][0];break;
-            case "b":
-                bitDPBCD = digitBCD[0][1];break;
-            case "c":
-                bitDPBCD = digitBCD[0][2];break;
-            case "d":
-                bitDPBCD = digitBCD[0][3];break;
-            case "e":
-                bitDPBCD = digitBCD[1][0];break;
-            case "f":
-                bitDPBCD = digitBCD[1][1];break;
-            case "g":
-                bitDPBCD = digitBCD[1][2];break;
-            case "h":
-                bitDPBCD = digitBCD[1][3];break;
-            case "i":
-                bitDPBCD = digitBCD[2][0];break;
-            case "j":
-                bitDPBCD = digitBCD[2][1];break;
-            case "k":
-                bitDPBCD = digitBCD[2][2];break;
-            case "m":
-                bitDPBCD = digitBCD[2][3];break;
-            case "1":
-                bitDPBCD = "1";break;
-            case "0":
-                bitDPBCD = "0";break;
-
-            default:
-                bitDPBCD = "0000";
-        }
+        bitDPBCD = switch (key) {
+            case "a" -> digitBCD[0][0];
+            case "b" -> digitBCD[0][1];
+            case "c" -> digitBCD[0][2];
+            case "d" -> digitBCD[0][3];
+            case "e" -> digitBCD[1][0];
+            case "f" -> digitBCD[1][1];
+            case "g" -> digitBCD[1][2];
+            case "h" -> digitBCD[1][3];
+            case "i" -> digitBCD[2][0];
+            case "j" -> digitBCD[2][1];
+            case "k" -> digitBCD[2][2];
+            case "m" -> digitBCD[2][3];
+            case "1" -> "1";
+            case "0" -> "0";
+            default -> "0000";
+        };
 
         return bitDPBCD;
     }
