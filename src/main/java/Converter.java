@@ -16,6 +16,7 @@ public class Converter {
 
     public Converter() {
         dpbcd = new DPBCD();
+
     }
 
     void normalize() {
@@ -67,8 +68,42 @@ public class Converter {
         }
     }
 
-    void binaryToHexadecimal() {
+    public String HexaTable(String binary){
 
+        String pattern;
+        pattern = switch (binary) {
+            case "0000" -> "0";
+            case "0001" -> "1";
+            case "0010" -> "2";
+            case "0011" -> "3";
+            case "0100" -> "4";
+            case "0101" -> "5";
+            case "0110" -> "6";
+            case "0111" -> "7";
+            case "1000" -> "8";
+            case "1001" -> "9";
+            case "1010" -> "A";
+            case "1011" -> "B";
+            case "1100" -> "C";
+            case "1101" -> "D";
+            case "1110" -> "E";
+            case "1111" -> "F";
+
+            default -> "0";
+        };
+
+        return pattern;
+    }
+
+    void binaryToHexadecimal() {
+        String fullBin = signBit + combiField + expContinuation + dpbcd;
+        StringBuilder hexa = new StringBuilder("0x");
+        int cutoff;
+        for(int i = 1; i <= 8; i++){
+            cutoff = i * 4;
+            String substring_bin = fullBin.substring(cutoff - 4, cutoff);
+            hexa.append(HexaTable(substring_bin));
+        }
     }
 
     /*
