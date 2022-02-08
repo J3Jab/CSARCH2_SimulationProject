@@ -18,7 +18,11 @@ public class Converter {
     String combiField;
     String expContinuation;
 
+    String first3digitsDPBCD;
+    String last3digitsDPBCD;
     String binToHexa;
+
+
     public Converter() {
         dpbcd = new DPBCD();
 
@@ -44,6 +48,12 @@ public class Converter {
         this.decimal = decimal;
         this.exponent = exponent;
         normalize();
+        roundOff();
+
+        while (this.decimal > 9999999 || this.decimal < -9999999) {
+            this.decimal /= 10;
+            this.exponent += 1;
+        }
 
         //signBit
         if (this.decimal > 0) {
@@ -56,6 +66,7 @@ public class Converter {
         computeEPrime(this.exponent);
         determineCombiField();
         expContinuation = ePrimeBinary.substring(2);
+        determineDPBCD();
         /* do coefficient continuation here*/
         //dpbcd.computeDPBCD(Integer.toString((int)decimal % 1000000));
         //round up
@@ -63,16 +74,13 @@ public class Converter {
         //split the 6-digit number into two
         //get the bcd of the first half and second half, combine strings together
         System.out.println("before rounding: "+ this.decimal);
-        roundOff();
 
-        while (this.decimal > 9999999 || this.decimal < -9999999) {
-            this.decimal /= 10;
-            this.exponent += 1;
-        }
 
         System.out.println("rounded off: " + this.decimal);
         System.out.println("exponent: " + this.exponent);
-        System.out.println(signBit + " " + combiField + " " + expContinuation);
+        System.out.println(signBit + " " + combiField + " " + expContinuation + " "
+                + first3digitsDPBCD + " " + last3digitsDPBCD);
+        binaryToHexadecimal();
     }
 
     public static long roundEven(double d) {
@@ -126,9 +134,23 @@ public class Converter {
     }
 
     void determineDPBCD(){
+        int value = (int) this.decimal;
+        value = Math.abs(value);
+        String stringVal = String.valueOf(value);
+        System.out.println(stringVal);
+        String last3digits = stringVal.substring(4, 7);
+        String first3digits = stringVal.substring(1, 4);
 
+        System.out.println(first3digits);
+        System.out.println(last3digits);
+
+        first3digitsDPBCD = dpbcd.computeDPBCD(first3digits);
+        last3digitsDPBCD = dpbcd.computeDPBCD(last3digits);
+
+        System.out.println(first3digitsDPBCD);
+        System.out.println(last3digitsDPBCD);
     }
-    
+
     public String HexaTable(String binary){
 
         String pattern;
@@ -157,7 +179,7 @@ public class Converter {
     }
 
     void binaryToHexadecimal() {
-        String fullBin = signBit + combiField + expContinuation + dpbcd;
+        String fullBin = signBit + combiField + expContinuation + first3digitsDPBCD + last3digitsDPBCD;
         StringBuilder hexa = new StringBuilder("0x");
         int cutoff;
         for(int i = 1; i <= 8; i++){
@@ -166,22 +188,23 @@ public class Converter {
             hexa.append(HexaTable(substring_bin));
         }
 
-    }
+        System.out.println(hexa.toString());
 
+    }
 
     public static void main(String[] args) {
         Converter abc = new Converter();
 
         abc.roundOffMethod = 2;
         //only works on already normalized inputs
-        abc.convert(1.0, 10);
-        abc.convert(7123456.1, 20);
-        abc.convert(71234560000.0, 16);
-        abc.convert(-9.9999999, -20);
-        abc.convert(-1234567, 9);
-        abc.convert(-1.234567, 15);
-        abc.convert(9.9999999, 15);
-        abc.convert(NaN, 15);
+//        abc.convert(1.0, 10);
+        abc.convert(7123456.0, 20);
+//        abc.convert(71234560000.0, 16);
+//        abc.convert(-9.9999999, -20);
+//        abc.convert(-1234567, 9);
+//        abc.convert(-1.234567, 15);
+//        abc.convert(9.9999999, 15);
+        //abc.convert(NaN, 15);
 
     }
 
