@@ -1,5 +1,7 @@
 package main.java;
 
+import static java.lang.Double.NaN;
+
 public class Converter {
 
     private final DPBCD dpbcd;
@@ -9,11 +11,14 @@ public class Converter {
     int mostSigBit;
     String significantBitBinary;
 
+    int roundOffMethod;
+
     String signBit;
     String ePrimeBinary;
     String combiField;
     String expContinuation;
 
+    String binToHexa;
     public Converter() {
         dpbcd = new DPBCD();
 
@@ -21,14 +26,17 @@ public class Converter {
 
     void normalize() {
         System.out.println(this.decimal);
-        while (this.decimal < 1000000 && this.decimal > -1000000) {
-            this.decimal *= 10;
-//            System.out.println(this.decimal);
-            exponent -= 1;
+        if(this.decimal < 1000000.0 && this.decimal > -1000000.0){
+            while (this.decimal < 1000000.0 && this.decimal > -1000000.0) {
+                this.decimal *= 10;
+                exponent -= 1;
+            }
         }
-        while (this.decimal > 9999999 || this.decimal < -9999999) {
-            this.decimal /= 10f;
-            exponent += 1;
+        else{
+            while (this.decimal > 9999999 || this.decimal < -9999999) {
+                this.decimal /= 10;
+                exponent += 1;
+            }
         }
     }
 
@@ -36,7 +44,6 @@ public class Converter {
         this.decimal = decimal;
         this.exponent = exponent;
         normalize();
-        System.out.println(this.decimal);
 
         //signBit
         if (this.decimal > 0) {
@@ -55,10 +62,46 @@ public class Converter {
         //separate the msb to the rest of the normalized/rounded up number
         //split the 6-digit number into two
         //get the bcd of the first half and second half, combine strings together
+        System.out.println("before rounding: "+ this.decimal);
+        roundOff();
 
+        while (this.decimal > 9999999 || this.decimal < -9999999) {
+            this.decimal /= 10;
+            this.exponent += 1;
+        }
+
+        System.out.println("rounded off: " + this.decimal);
+        System.out.println("exponent: " + this.exponent);
         System.out.println(signBit + " " + combiField + " " + expContinuation);
     }
 
+    public static long roundEven(double d) {
+        return Math.round(d / 2) * 2;
+    }
+
+    void roundOff(){
+        switch (roundOffMethod){
+            // truncate
+            case 1:
+                int temp;
+                temp = (int) this.decimal;
+                this.decimal = temp;
+                break;
+            // round down
+            case 2:
+                this.decimal = Math.floor(this.decimal);
+                break;
+            // round up
+            case 3:
+                this.decimal = Math.ceil(this.decimal);
+                System.out.println(this.decimal);
+                break;
+            // round to nearest (ties to even)
+            case 4:
+                this.decimal = roundEven(this.decimal);
+                break;
+        }
+    }
     void msbToBinary(double decimal) {
         mostSigBit = Math.abs((int)decimal);
         while (mostSigBit > 9) {
@@ -82,6 +125,10 @@ public class Converter {
         }
     }
 
+    void determineDPBCD(){
+
+    }
+    
     public String HexaTable(String binary){
 
         String pattern;
@@ -118,17 +165,24 @@ public class Converter {
             String substring_bin = fullBin.substring(cutoff - 4, cutoff);
             hexa.append(HexaTable(substring_bin));
         }
+
     }
 
 
     public static void main(String[] args) {
         Converter abc = new Converter();
+
+        abc.roundOffMethod = 2;
         //only works on already normalized inputs
-        abc.convert(7123456, 20);
+        abc.convert(1.0, 10);
+        abc.convert(7123456.1, 20);
         abc.convert(71234560000.0, 16);
-        abc.convert(-8765432, -20);
+        abc.convert(-9.9999999, -20);
         abc.convert(-1234567, 9);
         abc.convert(-1.234567, 15);
+        abc.convert(9.9999999, 15);
+        abc.convert(NaN, 15);
+
     }
 
 }
