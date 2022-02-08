@@ -18,14 +18,23 @@ public class Converter {
         dpbcd = new DPBCD();
     }
 
-    void normalize() {
-        //normalize + rounding here??
+    void normalize(float decimal) {
+        while (decimal < 1000000 && decimal > -1000000) {
+            decimal *= 10f;
+            exponent -= 1;
+        }
+        while (decimal > 9999999 || decimal < -9999999) {
+            decimal /= 10f;
+            exponent += 1;
+        }
+
     }
 
     void convert(float decimal, int exponent) {
         this.decimal = decimal;
         this.exponent = exponent;
-        //normalize();
+        normalize(this.decimal);
+        System.out.println(this.decimal);
 
         //signBit
         if (this.decimal > 0) {
@@ -40,6 +49,10 @@ public class Converter {
         expContinuation = ePrimeBinary.substring(2);
         /* do coefficient continuation here*/
         //dpbcd.computeDPBCD(Integer.toString((int)decimal % 1000000));
+        //round up
+        //separate the msb to the rest of the normalized/rounded up number
+        //split the 6-digit number into two
+        //get the bcd of the first half and second half, combine strings together
 
         System.out.println(signBit + " " + combiField + " " + expContinuation);
     }
@@ -71,13 +84,15 @@ public class Converter {
 
     }
 
-    /*
+
     public static void main(String[] args) {
         Converter abc = new Converter();
         //only works on already normalized inputs
-        abc.convert(-7123456, 20);
-        abc.convert(-8765432, -20);
-        abc.convert(-1234567, 9);
+        abc.convert(7123456f, 20);
+        abc.convert(71234560000f, 16);
+        abc.convert(-8765432f, -20);
+        abc.convert(-1234567f, 9);
+        abc.convert(-1.234567f, 15);
     }
-    */
+
 }
