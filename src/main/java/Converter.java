@@ -4,7 +4,7 @@ public class Converter {
 
     private final DPBCD dpbcd;
 
-    float decimal;
+    double decimal;
     int exponent;
     int mostSigBit;
     String significantBitBinary;
@@ -19,22 +19,23 @@ public class Converter {
 
     }
 
-    void normalize(float decimal) {
-        while (decimal < 1000000 && decimal > -1000000) {
-            decimal *= 10f;
+    void normalize() {
+        System.out.println(this.decimal);
+        while (this.decimal < 1000000 && this.decimal > -1000000) {
+            this.decimal *= 10;
+//            System.out.println(this.decimal);
             exponent -= 1;
         }
-        while (decimal > 9999999 || decimal < -9999999) {
-            decimal /= 10f;
+        while (this.decimal > 9999999 || this.decimal < -9999999) {
+            this.decimal /= 10f;
             exponent += 1;
         }
-
     }
 
-    void convert(float decimal, int exponent) {
+    void convert(double decimal, int exponent) {
         this.decimal = decimal;
         this.exponent = exponent;
-        normalize(this.decimal);
+        normalize();
         System.out.println(this.decimal);
 
         //signBit
@@ -58,7 +59,7 @@ public class Converter {
         System.out.println(signBit + " " + combiField + " " + expContinuation);
     }
 
-    void msbToBinary(float decimal) {
+    void msbToBinary(double decimal) {
         mostSigBit = Math.abs((int)decimal);
         while (mostSigBit > 9) {
             mostSigBit /= 10;
@@ -123,11 +124,11 @@ public class Converter {
     public static void main(String[] args) {
         Converter abc = new Converter();
         //only works on already normalized inputs
-        abc.convert(7123456f, 20);
-        abc.convert(71234560000f, 16);
-        abc.convert(-8765432f, -20);
-        abc.convert(-1234567f, 9);
-        abc.convert(-1.234567f, 15);
+        abc.convert(7123456, 20);
+        abc.convert(71234560000.0, 16);
+        abc.convert(-8765432, -20);
+        abc.convert(-1234567, 9);
+        abc.convert(-1.234567, 15);
     }
 
 }
