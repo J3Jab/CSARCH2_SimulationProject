@@ -49,11 +49,7 @@ public class Converter {
         this.exponent = exponent;
         normalize();
         roundOff();
-
-        while (this.decimal > 9999999 || this.decimal < -9999999) {
-            this.decimal /= 10;
-            this.exponent += 1;
-        }
+        normalize();
 
         //signBit
         if (this.decimal > 0) {
@@ -61,23 +57,29 @@ public class Converter {
         }
         else {signBit = "1";}
 
-        msbToBinary(this.decimal);
+        if(exponent > 90 || exponent < -101){
+            combiField = "11110";
+            expContinuation = "000000";
+            first3digitsDPBCD = "0000000000";
+            last3digitsDPBCD = "0000000000";
 
-        computeEPrime(this.exponent);
-        determineCombiField();
-        expContinuation = ePrimeBinary.substring(2);
-        determineDPBCD();
-        /* do coefficient continuation here*/
-        //dpbcd.computeDPBCD(Integer.toString((int)decimal % 1000000));
-        //round up
-        //separate the msb to the rest of the normalized/rounded up number
-        //split the 6-digit number into two
-        //get the bcd of the first half and second half, combine strings together
-        System.out.println("before rounding: "+ this.decimal);
+        }
+        else if (Double.isNaN(this.decimal)){
+            combiField = "11111";
+            expContinuation = "000000";
+            first3digitsDPBCD = "0000000000";
+            last3digitsDPBCD = "0000000000";
+
+        }
+        else{
+            msbToBinary(this.decimal);
+            computeEPrime(this.exponent);
+            determineCombiField();
+            expContinuation = ePrimeBinary.substring(2);
+            determineDPBCD();
+        }
 
 
-        System.out.println("rounded off: " + this.decimal);
-        System.out.println("exponent: " + this.exponent);
         System.out.println(signBit + " " + combiField + " " + expContinuation + " "
                 + first3digitsDPBCD + " " + last3digitsDPBCD);
         binaryToHexadecimal();
@@ -199,12 +201,13 @@ public class Converter {
         //only works on already normalized inputs
 //        abc.convert(1.0, 10);
         abc.convert(7123456.0, 20);
+        abc.convert(-8765432, -20);
 //        abc.convert(71234560000.0, 16);
 //        abc.convert(-9.9999999, -20);
 //        abc.convert(-1234567, 9);
-//        abc.convert(-1.234567, 15);
+       abc.convert(-1.234567, 98);
 //        abc.convert(9.9999999, 15);
-        //abc.convert(NaN, 15);
+        abc.convert(NaN, 15);
 
     }
 
