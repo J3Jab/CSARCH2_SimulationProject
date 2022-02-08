@@ -9,7 +9,6 @@ public class DPBCD {
     public String DecimalToBinary(String Decimal){
 
         String bin;
-        System.out.println(Decimal);
         bin = switch (Decimal) {
             case "0" -> "0000";
             case "1" -> "0001";
@@ -30,7 +29,6 @@ public class DPBCD {
     public String PatternTable(String msb){
 
         String pattern;
-        System.out.println(msb);
         pattern = switch (msb) {
             case "000" -> "bcdfgh0jkm";
             case "001" -> "bcdfgh100m";
@@ -49,7 +47,6 @@ public class DPBCD {
     public String keyDPBCD(String[][] digitBCD, String key){
 
         String bitDPBCD;
-        System.out.println(key);
         bitDPBCD = switch (key) {
             case "a" -> digitBCD[0][0];
             case "b" -> digitBCD[0][1];
@@ -79,11 +76,6 @@ public class DPBCD {
 
     }
     public void computeDPBCD(String input){
-//        int hundreds, tens, ones;
-//        hundreds = Integer.parseInt(String.valueOf(input.charAt(0)));
-//        tens = Integer.parseInt(String.valueOf(input.charAt(1)));
-//        ones = Integer.parseInt(String.valueOf(input.charAt(2)));
-
         String temp;
         String[][] digitBCD = new String[3][4];
         for(int i = 0; i < 3; i++){
@@ -92,22 +84,18 @@ public class DPBCD {
         }
 
         String msb = digitBCD[0][0] + digitBCD[1][0] + digitBCD[2][0];
-        System.out.println(msb);
         String pattern = PatternTable(msb);
-        System.out.println(pattern.length());
 
-        String answer = "";
+        StringBuilder answer = new StringBuilder();
         for(int i = 0; i < pattern.length(); i++){
-            answer += keyDPBCD(digitBCD, String.valueOf(pattern.charAt(i)));
+            answer.append(keyDPBCD(digitBCD, String.valueOf(pattern.charAt(i))));
         }
-
-        System.out.println(answer);
 
     }
 
     public static void main(String[] args) {
         DPBCD object = new DPBCD();
-        object.computeDPBCD("956");
+        object.computeDPBCD("945");
     }
 
 }
