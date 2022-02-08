@@ -75,7 +75,7 @@ public class DPBCD {
         }
 
     }
-    public void computeDPBCD(String input){
+    public String computeDPBCD(String input){
         String temp;
         String[][] digitBCD = new String[3][4];
         for(int i = 0; i < 3; i++){
@@ -91,6 +91,7 @@ public class DPBCD {
             answer.append(keyDPBCD(digitBCD, String.valueOf(pattern.charAt(i))));
         }
 
+        return answer.toString();
     }
 
     public static void main(String[] args) {
