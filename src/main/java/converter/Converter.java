@@ -283,7 +283,9 @@ public class Converter {
         }
 
         if (e.getSource() == convert_btn) {
-            if (decinput_tf.getText() == null || expinput_tf.getText() == null ||
+            if (decinput_tf.getText().contains("NaN")) { expinput_tf.setText("1"); }
+
+            if (decinput_tf.getText() == null ||
                     decinput_tf.getText().trim().isEmpty() || expinput_tf.getText().trim().isEmpty()) {
                 Alert fail = new Alert(Alert.AlertType.ERROR);
                 fail.setHeaderText("Empty Field");
@@ -305,7 +307,7 @@ public class Converter {
                     } else {
                         Alert fail = new Alert(Alert.AlertType.ERROR);
                         fail.setHeaderText("Invalid Input");
-                        fail.setContentText("Exponent cannot be a float or equal to NaN.");
+                        fail.setContentText("Exponent cannot be a decimal or equal to NaN.");
                         fail.showAndWait();
                     }
                 } else {
