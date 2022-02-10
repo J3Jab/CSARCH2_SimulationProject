@@ -1,0 +1,15 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="CSARCH2_SimulationProject:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/CSARCH2_SimulationProject_jar</output-path>
+    <root id="archive" name="CSARCH2_SimulationProject.jar">
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="module-output" name="CSARCH2_SimulationProject" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-graphics/11.0.2/javafx-graphics-11.0.2.jar" path-in-jar="/" />
+      <element id="library" level="project" name="Maven: org.openjfx:javafx-graphics:mac:11.0.2" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-base/11.0.2/javafx-base-11.0.2.jar" path-in-jar="/" />
+      <element id="library" level="project" name="Maven: org.openjfx:javafx-base:mac:11.0.2" />
+    </root>
+  </artifact>
+</component>
